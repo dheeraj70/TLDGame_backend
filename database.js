@@ -132,11 +132,11 @@ const pool = mysql
   export const storeVerificationToken = async (userId, token, expiresAt) => {
     try {
       // First, delete any existing token for this user
-      await pool.query('DELETE FROM VerificationTokens WHERE user_id = ?', [userId]);
+      await pool.query('DELETE FROM verificationtokens WHERE user_id = ?', [userId]);
   
       // Insert the new token
       await pool.query(
-        'INSERT INTO VerificationTokens (user_id, token, expires_at) VALUES (?, ?, ?)',
+        'INSERT INTO verificationtokens (user_id, token, expires_at) VALUES (?, ?, ?)',
         [userId, token, expiresAt]
       );
     } catch (err) {
@@ -176,8 +176,10 @@ export const verifyToken = async(token) =>{
   export const deleteUser = async (user_id) => {
     try {
       // Delete related records in the referrals table first
-      await pool.query('DELETE FROM referrals WHERE referred_id = ?', [user_id]);
-  
+      await pool.query('UPDATE referrals SET referred_id = NULL WHERE referred_id = ?', [user_id]);
+      
+      await pool.query('UPDATE referrals SET referrer_id = NULL WHERE referrer_id = ?', [user_id]);
+
       // Now delete the user
       await pool.query('DELETE FROM users WHERE id = ?', [user_id]);
   
@@ -216,7 +218,10 @@ export const pairReferral = async (referrerId, referredId) => {
 
 export const getUserByRefID = async(refID)=>{
   const [rows] = await pool.query('SELECT id FROM users where refID = ?',[refID]);
-  return(rows[0].id);
+  if(rows.length > 0){
+  return(rows[0].id);}else{
+    return false;
+  }
 }
 
 
