@@ -52,7 +52,7 @@ app.use(session({
 */
 app.set("trust proxy", 1); //render has a reverse proxy --test
 app.use(session({
-  cookie: { maxAge: 86400000 /*,sameSite: "none", secure: true */},
+  cookie: { maxAge: 86400000 ,sameSite: "none", secure: true},
   store: new MemoryStore({
     checkPeriod: 86400000 // prune expired entries every 24h
   }),
