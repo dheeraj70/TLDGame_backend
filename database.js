@@ -193,6 +193,9 @@ export const verifyToken = async(token) =>{
 
 export const pairReferral = async (referrerId, referredId) => {
   try {
+    if (referrerId === 0 || reffererId >= referredId){
+      return { success: false, message: 'Conditions not met' };
+    }
     // Check if the referral already exists
     const [existingReferral] = await pool.query(
       'SELECT * FROM referrals WHERE referrer_id = ? AND referred_id = ?',
