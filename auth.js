@@ -44,7 +44,8 @@ passport.use(new GoogleStrategy({
         null, // No password for OAuth users
         'google', // OAuth provider
         profile.id, // OAuth ID
-        profile.displayName // Display name
+        profile.displayName, // Display name
+        true //is active for oauth users
       );
     }
     return done(null, user);
@@ -68,7 +69,8 @@ passport.use(new FacebookStrategy({
         null, // No password for OAuth users
         'facebook', // OAuth provider
         profile.id, // OAuth ID
-        `${profile.name.givenName} ${profile.name.familyName}` // Display name
+        `${profile.name.givenName} ${profile.name.familyName}`, // Display name
+        true //is active for oauth users
       );
     }
     return done(null, user);
@@ -92,7 +94,8 @@ passport.use(new LinkedInStrategy({
         null, // No password for OAuth users
         'linkedin', // OAuth provider
         profile.id, // OAuth ID
-        profile.displayName // Display name
+        profile.displayName, // Display name
+        true //is active for oauth users
       );
     }
     return done(null, user);
